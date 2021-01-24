@@ -12,56 +12,88 @@ map<string, string> knowladge = {  //База вопросов и ответов
     {"what are you up to", "Ansering stupid question"},
 };
 
-void bot(string text) {
-    cout << "[BOT]: " << text << "\n";
-}
 
-// Hello dude, how are you? And by the way what is your name?
 
-void botAnswer(string question) {
-    for (auto entry : knowladge) {
-        //entry.first - вопрос
-        //entry.second - ответ
-        regex expression = regex(".*" + entry.first + ".*");
-        if (regex_match(question, expression)) {
+string exitPhrases[] = { "exit", "bye", "have a good day" };
 
-        }
-    }
-
-}
-
-//Принимает на вход строку и возвращает её в нижний регистр
+//Принимает на вход строку и возвращает такую же строку, только в нижнем регистре
 string to_lower(string text) {
     transform(text.begin(), text.end(), text.begin(), ::tolower);
     return text;
 }
 
+void botSay(string text) {
+    cout << "[BOT]: " << text << "\n";
+}
+
+string userQuestion() {
+    string question;
+    cout << "[USER]: ";
+    getline(cin, question);
+    question = to_lower(question);
+    return question;
+}
+
+
+bool isExit(string text) {
+    for (auto phrase : exitPhrases) {
+        regex expression = regex(".*" + phrase + ".*");
+        if (regex_match(text, expression)) {
+            botSay("Ok, byeeee");
+            return true; // Да, фраза для выхода
+        }
+    }
+    return false; //Нет, не содержит
+}
+
+
+
+//Выводит на экран ответ на вопрос question
+void botAnswer(string question) {
+    bool foundAnswer = false; //Найден ответ?
+    for (auto entry : knowladge) { //Для  каждой записи в базе
+        //entry.first - вопрос
+        //entry.second - ответ
+        regex expression = regex(".*" + entry.first + ".*");
+        if (regex_match(question, expression)) {
+            //Дать ответ
+            botSay(entry.second);
+            foundAnswer = true;
+        }
+    }
+    if (!foundAnswer) { // Если не найден ответ
+        botSay("Do not comperende");
+    }
+}
+
+
+
 
 int main()
 {
-    setlocale(LC_ALL, "rus");
+    //setlocale(LC_ALL, "rus");
 
-    cout << "Hellw, Welcome\n";
+    //cout << "Hellw, Welcome\n";
+
+    //string question;
+    cout << "Hello, Welcome to Chatbot\n";
 
     string question;
 
+    //while (question != "exit") {
+    //getline(cin, question);
+    //question = to_lower(question); //Получим вопрос от пользователя
+    //cout << "Yuor question: " << question << "\n";
+    while (!isExit(question)) {// Выполняем код, пока вопрос не содержит фразы для выхода
+        question = userQuestion();
+        botAnswer(question);
 
-    while (question != "exit") {
-    getline(cin, question);
-    question = to_lower(question); //Получим вопрос от пользователя
-    cout << "Yuor question: " << question << "\n";
+        botAnswer(question);
+    }
 
-    botAnswer(question);
-       /* if (question == "Hellow") {
-            cout << "Helloow, bro\n";
-        }
+    // Getline - прочитать строчку
+    // Из ввода программы (cin) в переменную question
 
-        if (question == "Hi") {
-            cout << "Hi, bro\n";
-        }
-        if (question == "Baka") {
-            cout << "Mb you baka, bro\n";
-        }*/
-    };
-}
+    }
+
 
