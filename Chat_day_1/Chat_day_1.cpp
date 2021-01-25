@@ -6,17 +6,17 @@
 
 using namespace std;
 
-map<string, string> knowladge = {  //База вопросов и ответов
+map<string, string> knowledge = {  //База вопросов и ответов
     {"hello", "oh, hellow hooman!"}, //{"вопрос", "ответ"}
     {"how are you", "Not too bad for a machine"},
     {"what are you up to", "Ansering stupid question"},
+    {"bro", "wow wow wow, HELLOOO"},
 };
-
-
 
 string exitPhrases[] = { "exit", "bye", "have a good day" };
 
-//Принимает на вход строку и возвращает такую же строку, только в нижнем регистре
+//Принимает на вход строку и возвращает такую же строку
+//только в нижнем регистре
 string to_lower(string text) {
     transform(text.begin(), text.end(), text.begin(), ::tolower);
     return text;
@@ -26,6 +26,7 @@ void botSay(string text) {
     cout << "[BOT]: " << text << "\n";
 }
 
+// Получить вопрос от пользователя
 string userQuestion() {
     string question;
     cout << "[USER]: ";
@@ -33,7 +34,6 @@ string userQuestion() {
     question = to_lower(question);
     return question;
 }
-
 
 bool isExit(string text) {
     for (auto phrase : exitPhrases) {
@@ -46,12 +46,10 @@ bool isExit(string text) {
     return false; //Нет, не содержит
 }
 
-
-
 //Выводит на экран ответ на вопрос question
 void botAnswer(string question) {
     bool foundAnswer = false; //Найден ответ?
-    for (auto entry : knowladge) { //Для  каждой записи в базе
+    for (auto entry : knowledge) { //Для  каждой записи в базе
         //entry.first - вопрос
         //entry.second - ответ
         regex expression = regex(".*" + entry.first + ".*");
@@ -66,28 +64,19 @@ void botAnswer(string question) {
     }
 }
 
-
-
-
 int main()
 {
     //setlocale(LC_ALL, "rus");
-
     //cout << "Hellw, Welcome\n";
-
     //string question;
     cout << "Hello, Welcome to Chatbot\n";
 
-    string question;
+   
+    string question; //Объявление переменной, тип+имя
 
-    //while (question != "exit") {
-    //getline(cin, question);
-    //question = to_lower(question); //Получим вопрос от пользователя
-    //cout << "Yuor question: " << question << "\n";
+    
     while (!isExit(question)) {// Выполняем код, пока вопрос не содержит фразы для выхода
         question = userQuestion();
-        botAnswer(question);
-
         botAnswer(question);
     }
 
@@ -95,5 +84,3 @@ int main()
     // Из ввода программы (cin) в переменную question
 
     }
-
-
